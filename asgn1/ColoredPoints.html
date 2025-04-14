@@ -16,6 +16,7 @@
       <button onclick="setshape('square')">Squares</button>
       <button onclick="setshape('triangle')">Triangles</button>
       <button onclick="setshape('circle')">Circles</button>
+      <button onclick="setshape('star')">Stars</button>
     </div>
     <div id="sliders">
       Shape Color: <br>
@@ -27,7 +28,12 @@
       Shape Size: <input type="range" id="shapesize" min="5" max="50" />
       (Circles) Segment Count: <input type="range" value="0" id="segcount" min="5" max="40" />
     </div>
+    <div id="customdrawing">
     <button onclick="customdrawing()">My drawing</button>
+    My Original Cow Drawing
+  </div>
+    <img src="cow.jpeg" width="300"height="300">
+    
     <script src="lib/webgl-utils.js"></script>
     <script src="lib/webgl-debug.js"></script>
     <script src="lib/cuon-utils.js"></script>

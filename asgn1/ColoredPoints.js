@@ -168,13 +168,19 @@ function click(ev) {
     newshape.color = [red.value/255, green.value/255, blue.value/255, 1.0];
     g_shapelist.push(newshape);
   }
-  else{
+  else if(curshape == "circle"){
     newshape = new Circle();
     newshape.position = [x,y];
     newshape.segments = segcount.value;
     newshape.size=shapesize.value;
     newshape.color = [red.value/255, green.value/255, blue.value/255, 1.0];
     g_shapelist.push(newshape);
+  }
+  else{//Star
+    let d = shapesize.value/200;
+    //console.log(x-(0.5*d), y, x+(0.5*d), y, x, y+d, 1, 0, 0, 1.0);
+    createtriangle(x-(0.5*d), y, x+(0.5*d), y, x, y+0.866*d, red.value, green.value, blue.value, 10.0);
+    createtriangle(x-(0.5*d), y+0.577*d, x+(0.5*d), y+0.577*d, x, y-0.289*d, red.value, green.value, blue.value, 10.0);
   }
   renderAllShapes();
 }
