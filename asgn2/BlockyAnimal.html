@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Change a point color</title>
+    <title>Blocky Horse</title>
   </head>
 
   <body onload="main()">
@@ -11,27 +11,32 @@
     <br>
     chouske@ucsc.edu
     <br>
+    Blocky Horse Galloping
+    <br>
+    Shift click to make the tail fling up
+    <br>
+    I only used a chatgpt just to help understand transformations(ended up being useless..) and just to find the names of functions to do the keydown stuff
+    <br>
     <canvas id="webgl" width="400" height="400">
     Please use a browser that supports "canvas"
     </canvas>
     <br>
-    <button onclick="clearCanvas()">Clear Canvas</button>
-    Drawing Mode:
-    <div id="shapebuttons">
-      <button onclick="setshape('square')">Squares</button>
-      <button onclick="setshape('triangle')">Triangles</button>
-      <button onclick="setshape('circle')">Circles</button>
-    </div>
-    <div id="sliders">
-      Shape Color: <br>
-      Red <input type="range" id="red" min="0" max="255" />
-      Green <input type="range" id="green" min="0" max="255" />
-      Blue <input type="range" id="blue" min="0" max="255" />
-    </div>
     <div id="shapeoptions">
+      Head
+      <input type="range", min="-50", max="50", value="0", class="slider", id="headSlide" oninput="(function(){g_headAngle = event.target.value;})()">
+      Neck
+      <input type="range", min="0", max="75", value="45", class="slider", id="neckSlide" oninput="(function(){g_neckAngle = event.target.value;})()">
+      Ears
+      <input type="range", min="-25", max="25", value="0", class="slider", id="earSlide" oninput="(function(){g_earAngle = event.target.value;})()">
       Camera Angle
-      <input type="range", min="-90", max="90", value="5", class="slider", id="angleSlide" oninput="(function(){g_globalAngle = event.target.value; renderAllShapes()})()">
+      <input type="range", min="-180", max="180", value="0", class="slider", id="angleSlide" oninput="(function(){g_globalAngle = event.target.value;})()">
     </div>
+    <div id ="animationoptions">
+      Animations
+      <button onclick="animations=true">On</button>
+      <button onclick="animations=false">Off</button>
+    </div>
+    <script src="lib/stats.js"></script>
     <script src="lib/webgl-utils.js"></script>
     <script src="lib/webgl-debug.js"></script>
     <script src="lib/cuon-utils.js"></script>
@@ -39,6 +44,7 @@
     <script src="point.js"></script>
     <script src="triangle.js"></script>
     <script src="circle.js"></script>
+    <script src="pyramid.js"></script>
     <script src="cube.js"></script>
     <script src="BlockyAnimal.js"></script>
   </body>

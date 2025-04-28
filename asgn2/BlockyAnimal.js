@@ -1,3 +1,5 @@
+
+
 /*
 
 
@@ -35,6 +37,21 @@ let segcount;
 let u_ModelMatrix;
 let u_GlobalRotateMatrix;
 let g_globalAngle = 0;
+let g_tailAngle = 225;
+let g_headAngle = 0;
+let g_neckAngle = 45;
+let g_earAngle = 0;
+let howmuchadd = 1.8;
+let howmuchsubtract = 0.5;
+let animations = false;
+var stats = new Stats();
+let shiftisdown = false;
+let dosecret = false;
+let leg1shift = 0;
+stats.dom.style.left = "auto";
+stats.dom.style.right = "0";
+stats.showPanel(0);
+document.body.appendChild(stats.dom);
 function setupWebGL(){
   // Retrieve <canvas> element
   canvas = document.getElementById("webgl", { preserveDrawingBuffer: true});
@@ -96,29 +113,99 @@ function renderAllShapes(){
   var globalRotMat= new Matrix4().rotate(g_globalAngle,0,1,0);
   gl.uniformMatrix4fv(u_GlobalRotateMatrix, false, globalRotMat.elements);
   gl.clear(gl.COLOR_BUFFER_BIT);
-  /*var len = g_shapelist.length;
-  for(var i = 0; i < len; i++) {
-    g_shapelist[i].render();
-  }*/
- var body = new Cube();
- body.color = [1.0, 0.0, 0.0, 1.0];
- body.matrix.translate(-.25, -.5, 0.0);
- body.matrix.scale(0.5, 1, 0.5);
- body.render();
- var leftArm = new Cube();
- leftArm.color = [1, 1, 0, 1];
- leftArm.matrix.translate(.7, 0, 0.0);
- leftArm.matrix.rotate(45, 0, 0, 1);
- leftArm.matrix.scale(0.25, .7, .5);
- leftArm.render();
-}
-function clearCanvas(){
-  gl.clearColor(0.0, 0.0, 0.0, 1.0);
-  gl.clear(gl.COLOR_BUFFER_BIT);
-  g_shapelist= [];
-}
-function setshape(whatshape){
-  curshape = whatshape;
+ {var body = new Cube();
+  body.color = [137/255, 81/255, 41/255, 1.0];
+  body.matrix.translate(-.45, -.35, 0.0);
+  body.matrix.scale(1, 0.5, 0.5);
+  body.render();
+ }
+ {var leg1 = new Cube();
+  leg1.color = [117/255, 61/255, 21/255, 1.0];
+  leg1.matrix.translate(-.45, -.85 + leg1shift, 0.0);
+  leg1.matrix.scale(0.125, 0.5, 0.125);
+  leg1.render();
+ }
+ {var leg2 = new Cube();
+  leg2.color = [117/255, 61/255, 21/255, 1.0];
+  leg2.matrix.translate(-.25, -.85 + leg1shift, 0.375);
+  leg2.matrix.scale(0.125, 0.5, 0.125);
+  leg2.render();
+ }
+ {var leg3 = new Cube();
+  leg3.color = [117/255, 61/255, 21/255, 1.0];
+  leg3.matrix.translate(.225, -.85+0.3-leg1shift, 0.0);
+  leg3.matrix.scale(0.125, 0.5, 0.125);
+  leg3.render();
+ }
+ {var leg4 = new Cube();
+  leg4.color = [117/255, 61/255, 21/255, 1.0];
+  leg4.matrix.translate(.425, -.85+0.3-leg1shift, 0.375);
+  leg4.matrix.scale(0.125, 0.5, 0.125);
+  leg4.render();
+ }
+ {var tail = new Pyramid();
+  tail.color = [0, 0, 0, 1.0];
+  tail.matrix.translate(0.5,0,0.15)
+  tail.matrix.rotate(g_tailAngle, 0, 0, 1)
+  tail.matrix.rotate(160, 0, 0, 1);
+  tail.matrix.translate(0, -0.5, 0)
+  tail.matrix.scale(0.125, 0.5, 0.125);
+  tail.render();
+  /*tail.color = [0,0, 0, 1.0];
+  tail.matrix.translate(.55, -0.025, 0.1875);
+   tail.matrix.rotate(g_tailAngle, 0, 0, 1);
+  //tail.matrix.rotate(45, 0, 0, 1);
+  tail.matrix.scale(0.125, 0.5, 0.125);
+  tail.render();*/
+ }
+ 
+ {var neck = new Cube();
+  neck.color = [102/255, 60/255, 31/255, 1.0];
+  neck.matrix.translate(-.43, 0, 0.1875);
+  neck.matrix.rotate(g_neckAngle, 0, 0, 1);
+  neck.matrix.scale(0.17, 0.17, 0.17);
+  neck.render();
+ }
+ {var head = new Cube();
+  head.color = [137/255, 81/255, 41/255, 1.0]
+    //head.matrix.translate(-0.35, 0.17, 0.1875);
+  head.matrix.translate(-0.43, 0, 0);
+  head.matrix.rotate(g_neckAngle, 0, 0, 1);
+  head.matrix.translate(0, 0.17, 0);
+  head.matrix.rotate(g_headAngle, 0, 0, 1);
+  head.matrix.translate(0, 0.21, 0.1875);
+  head.matrix.rotate(180, 0, 0, 1)
+  head.matrix.scale(0.35, 0.21, 0.17);
+  head.render();
+ }
+ var test = new Cube();
+ test.color = [0,0,0,1];
+  //test.render();
+ {var ear = new Pyramid();
+  ear.color = [196/255, 164/255, 132/255, 1.0]
+  ear.matrix.translate(-0.44, 0, 0)
+  ear.matrix.rotate(g_neckAngle, 0, 0, 1);
+  ear.matrix.translate(0, 0.17, 0);
+  ear.matrix.rotate(g_headAngle, 0, 0, 1);
+  //ear.matrix.rotate(g_earAngle, 0, 0, 1);
+  ear.matrix.translate(0, 0.19, 0);
+  ear.matrix.rotate(g_earAngle, 0, 0, 1);
+  ear.matrix.translate(-0.05, 0, 0.3);//ALIGNS WITH HOW RECTANGLE WAS, IN TOP LEFT QUADRANT
+  ear.matrix.scale(0.05, 0.2, 0.04);
+  ear.render();
+  var ear2 = new Pyramid();
+  ear2.color = [196/255, 164/255, 132/255, 1.0]
+  ear2.matrix.translate(-0.44, 0, 0)
+  ear2.matrix.rotate(g_neckAngle, 0, 0, 1);
+  ear2.matrix.translate(0, 0.17, 0);
+  ear2.matrix.rotate(g_headAngle, 0, 0, 1);
+  //ear.matrix.rotate(g_earAngle, 0, 0, 1);
+  ear2.matrix.translate(0, 0.19, 0);
+  ear2.matrix.rotate(g_earAngle, 0, 0, 1);
+  ear2.matrix.translate(-0.05, 0, 0.1875);//ALIGNS WITH HOW RECTANGLE WAS, IN TOP LEFT QUADRANT
+  ear2.matrix.scale(0.05, 0.2, 0.04);
+  ear2.render();
+ }
 }
 function main() {
   curshape = "square";
@@ -130,39 +217,65 @@ function main() {
   setupWebGL();
   connectVariablesToGLSL();
   // Register function (event handler) to be called on a mouse press
-  //canvas.onmousedown = click;
+  canvas.onmousedown = click;
   //canvas.onmousemove = function(ev) {if(ev.buttons == 1){click(ev)}}
   // Specify the color for clearing <canvas>
-  gl.clearColor(0.0, 0.0, 0.0, 1.0);
-  renderAllShapes();
+  gl.clearColor(53/255, 81/255, 92/255, 1.0);
+  let mode = "up";
+  let leg1increase = 0.007;
+  tick();
+  function tick(){
+    {
+    if(dosecret == true){
+    if((mode == "up") && (g_tailAngle < 330)){
+      g_tailAngle = g_tailAngle + howmuchadd;
+      howmuchadd -= 0.009;
+    }
+    if((mode == "up") && (g_tailAngle > 330)){
+       howmuchadd = 1.8;
+      mode = "down";
+    }
+    if((mode == "down") && (g_tailAngle > 210)){
+      g_tailAngle = g_tailAngle - howmuchsubtract;
+      howmuchsubtract += 0.005;
+    }
+    if((mode == "down") && (g_tailAngle < 210)){
+      howmuchsubtract = 0.5;
+      mode = "up";
+      dosecret = false;
+    }
+    }
+    }
+    if(animations){
+    leg1shift += leg1increase;
+    if((leg1shift > 0.3) && (leg1increase > 0)){
+     leg1increase *= -1;
+    }
+    if((leg1shift < 0) && (leg1increase < 0)){
+      leg1increase *= -1;
+    }
+  }
+    stats.begin();
+    renderAllShapes();
+    stats.end();
+    requestAnimationFrame(tick);
+  }
 }
-//var g_shapelist = [];
+document.addEventListener("keydown", shiftdown);
+document.addEventListener("keyup", shiftup);
+function shiftdown(e){
+  if(e.code == "ShiftLeft"){
+    shiftisdown = true;
+    
+  }
+}
+function shiftup(e){
+  if(e.code == "ShiftLeft"){
+    shiftisdown = false;
+  }
+}
 function click(ev) {
-  [x, y] = convertCoordinatesEventToGL(ev);
-  let newshape;
-  if(curshape == "square"){
-    newshape = new Point();
-    newshape.position = [x, y];
-    newshape.color = [red.value/255, green.value/255, blue.value/255, 1.0];
-    newshape.size = shapesize.value;
-    g_shapelist.push(newshape);
+  if(shiftisdown){
+    dosecret = true;
   }
-  else if(curshape == "triangle"){
-    newshape = new Triangle();
-    newshape.position = [x,y];
-    newshape.size=shapesize.value;
-    let d = newshape.size/200;
-    newshape.coordinates = [x, y, x+d, y, x, y+d]
-    newshape.color = [red.value/255, green.value/255, blue.value/255, 1.0];
-    g_shapelist.push(newshape);
-  }
-  else if(curshape == "circle"){
-    newshape = new Circle();
-    newshape.position = [x,y];
-    newshape.segments = segcount.value;
-    newshape.size=shapesize.value;
-    newshape.color = [red.value/255, green.value/255, blue.value/255, 1.0];
-    g_shapelist.push(newshape);
-  }
-  renderAllShapes();
 }
