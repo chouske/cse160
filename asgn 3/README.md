@@ -1,0 +1,2 @@
+I used chatgpt to just help figure out a simple error converting
+my attribute to a uniform(I skipped one of the videos and did size functionality myself, used an attribute, but didn't know if that would later create a problem so I changed it to uniform). It just told me to change attributef to uniformf
