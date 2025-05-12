@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Blocky Horse</title>
+    <title>World</title>
   </head>
 
   <body onload="main()">
@@ -11,25 +11,21 @@
     <br>
     chouske@ucsc.edu
     <br>
-    Blocky Horse Galloping
+
     <br>
-    Shift click to make the tail fling up
+
     <br>
-    I only used a chatgpt just to help understand transformations(ended up being useless..) and just to find the names of functions to do the keydown stuff
+
     <br>
     <canvas id="webgl" width="400" height="400">
     Please use a browser that supports "canvas"
     </canvas>
     <br>
     <div id="shapeoptions">
-      Head
-      <input type="range", min="-50", max="50", value="0", class="slider", id="headSlide" oninput="(function(){g_headAngle = event.target.value;})()">
-      Neck
-      <input type="range", min="0", max="75", value="45", class="slider", id="neckSlide" oninput="(function(){g_neckAngle = event.target.value;})()">
-      Ears
-      <input type="range", min="-25", max="25", value="0", class="slider", id="earSlide" oninput="(function(){g_earAngle = event.target.value;})()">
-      Camera Angle
-      <input type="range", min="-180", max="180", value="0", class="slider", id="angleSlide" oninput="(function(){g_globalAngle = event.target.value;})()">
+      Horizontal Camera Angle
+      <input type="range", min="-180", max="180", value="0", class="slider", id="angleSlide" oninput="(function(){g_globalXAngle = event.target.value;})()">
+      Vertical Camera Angle
+      <input type="range", min="-180", max="180", value="0", class="slider", id="angleSlide" oninput="(function(){g_globalYAngle = event.target.value;})()">
     </div>
     <div id ="animationoptions">
       Animations
@@ -46,6 +42,6 @@
     <script src="circle.js"></script>
     <script src="pyramid.js"></script>
     <script src="cube.js"></script>
-    <script src="BlockyAnimal.js"></script>
+    <script src="world.js"></script>
   </body>
 </html>
