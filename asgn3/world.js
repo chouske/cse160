@@ -28,6 +28,7 @@ var FSHADER_SOURCE =
   varying vec2 v_UV;
   uniform vec4 u_FragColor;
   uniform sampler2D u_Sampler0;
+  uniform sampler2D u_Sampler1;
   uniform int u_whichTexture;
   void main() {
     if(u_whichTexture == -2){
@@ -40,6 +41,7 @@ var FSHADER_SOURCE =
       gl_FragColor = texture2D(u_Sampler0, v_UV);
     }
       else{
+        gl_FragColor = texture2D(u_Sampler1, v_UV);
       }
       
   }`
@@ -59,6 +61,7 @@ let u_ModelMatrix;
 let u_GlobalRotateMatrix;
 let u_GlobalRotateMatrixY;
 let u_Sampler0;
+let u_Sampler1;
 let u_ProjectionMatrix;
 let u_ViewMatrix;
 let u_whichTexture;
@@ -133,6 +136,11 @@ function connectVariablesToGLSL(){
     console.log('Failed to get the storage location of u_Sampler0');
     return false;
   }
+  u_Sampler1 = gl.getUniformLocation(gl.program, 'u_Sampler1');
+  if(!u_Sampler1){
+    console.log('Failed to get the storage location of u_Sampler1');
+    return false;
+  }
   u_whichTexture = gl.getUniformLocation(gl.program, 'u_whichTexture');
   if(!u_whichTexture){
     console.log('Failed to get the storage location of u_whichTexture');
@@ -168,6 +176,16 @@ function initTextures(gl, n){
   image.src = 'grass.png';
   return true;
 }
+function initTextures2(gl, n){
+  var image = new Image();
+  if(!image){
+    console.log('Failed to create the image object');
+    return false;
+  }
+  image.onload = function(){sendTextureToGLSL2(gl, n, u_Sampler1, image)};
+  image.src = 'bookshelf.png';
+  return true;
+}
 function sendTextureToGLSL(gl, n, u_Sampler, image){
   var texture = gl.createTexture();
   if(!texture){
@@ -182,11 +200,25 @@ function sendTextureToGLSL(gl, n, u_Sampler, image){
   gl.uniform1i(u_Sampler, 0);
   console.log('finished loadTexture');
 }
+function sendTextureToGLSL2(gl, n, u_Sampler, image){
+  var texture = gl.createTexture();
+  if(!texture){
+    console.log('Failed to create the texture object');
+    return false;
+  }
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+  gl.activeTexture(gl.TEXTURE1);
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+  gl.uniform1i(u_Sampler1, 1);
+  console.log('finished loadTexture');
+}
 function renderAllShapes(){
   var viewMat = new Matrix4();
   //More means further
   //Keep the third value(out of 9) positive
-   
+   { //Don't delete
    viewMat.setLookAt(eye.elements[0],eye.elements[1],eye.elements[2], at.elements[0],at.elements[1],at.elements[2], 0,1,0)
    gl.uniformMatrix4fv(u_ViewMatrix, false, viewMat.elements);
 
@@ -205,6 +237,7 @@ function renderAllShapes(){
   //
   gl.uniformMatrix4fv(u_GlobalRotateMatrixY, false, globalRotMatY.elements);
   gl.clear(gl.COLOR_BUFFER_BIT);
+   }
   var floor = new Cube();
   floor.textureNum = 0;
   floor.matrix.translate(-16, 0, -16);
@@ -216,13 +249,50 @@ function renderAllShapes(){
   skybox.matrix.translate(-16, 0, -16);
   skybox.matrix.scale(32, 32, 32);
   skybox.render();
+  {
+  createBook(1,0,0);
+  createBook(1,1,0);
+  createBook(1,0,1);
+  createBook(1,1,1);
+  createBook(1,1,2);
+  createBook(1,0,2);
+  } 
+  {
+  createBook(15,0,10);
+  createBook(15,1,10);
+  createBook(15,0,11);
+  createBook(15,1,11);
+  createBook(15,1,12);
+  createBook(15,0,12);
+  } 
+  {
+  createBook(15,0,10);
+  createBook(15,1,10);
+  createBook(15,0,11);
+  createBook(15,1,11);
+  createBook(15,1,12);
+  createBook(15,0,12);
+  } 
+  createBook(1,0,-14);
+  createBook(1,0,-15);
+  createBook(-10,0,13);
+  createBook(-5,0,5);
+   createBook(-13,0,-2);
+  //createBook(1,0,-16);
 
+  function createBook(x, y, z){
+    var book = new Cube();
+    book.textureNum = 1;
+    book.matrix.translate(x, y, 0-z);
+    book.render();
+   }
 }
 function main() {
   //shapesize = document.getElementById('shapesize');
   setupWebGL();
   connectVariablesToGLSL();
   initTextures(gl,0);
+  initTextures2(gl,0);
   canvas.onmousedown = click;
   gl.clearColor(53/255, 81/255, 92/255, 1.0);
   tick();
@@ -320,17 +390,6 @@ function rotate(degside, degup){
     eyeclone.add(forward3);
     at = eyeclone;
 }
-/*function rotateUp(degrees){
-   let atclone = new Vector3([at.elements[0], at.elements[1], at.elements[2]]);
-    let eyeclone = new Vector3([eye.elements[0], eye.elements[1], eye.elements[2]]);
-    let forward = atclone.sub(eye);
-    let rmatrix = new Matrix4();
-    rmatrix.setRotate(degrees, 1, 0, 0);
-    forward2 = rmatrix.multiplyVector3(forward);
-    //forward2.normalize();
-    eyeclone.add(forward2);
-    at = eyeclone;
-}*/
 function click(ev) {
 
 }

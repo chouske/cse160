@@ -1,2 +1,2 @@
-I used chatgpt to just help figure out a simple error converting
-my attribute to a uniform(I skipped one of the videos and did size functionality myself, used an attribute, but didn't know if that would later create a problem so I changed it to uniform). It just told me to change attributef to uniformf
+My camera has an issue where rotating to the left/right and then upward will not go upward/downward correctly and will instead rotate in a circular motion
+I used chatgpt to help understand how to do the camera I was very lost on that part, alongside it helping me find syntax errors

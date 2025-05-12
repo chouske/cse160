@@ -11,9 +11,9 @@
     <br>
     chouske@ucsc.edu
     <br>
-
+    My camera has an issue where rotating to the left/right and then upward will not go upward/downward correctly and will instead rotate in a circular motion
     <br>
-
+    I used chatgpt to help understand how to do the camera I was very lost on that part
     <br>
 
     <br>
@@ -21,17 +21,6 @@
     Please use a browser that supports "canvas"
     </canvas>
     <br>
-    <div id="shapeoptions">
-      Horizontal Camera Angle
-      <input type="range", min="-180", max="180", value="0", class="slider", id="angleSlide" oninput="(function(){g_globalXAngle = event.target.value;})()">
-      Vertical Camera Angle
-      <input type="range", min="-180", max="180", value="0", class="slider", id="angleSlide" oninput="(function(){g_globalYAngle = event.target.value;})()">
-    </div>
-    <div id ="animationoptions">
-      Animations
-      <button onclick="animations=true">On</button>
-      <button onclick="animations=false">Off</button>
-    </div>
     <script src="lib/Stats.js"></script>
     <script src="lib/webgl-utils.js"></script>
     <script src="lib/webgl-debug.js"></script>
