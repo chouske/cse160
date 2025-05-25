@@ -1,0 +1,68 @@
+<!---Chase Houske chouske@ucsc.edu-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Lighting world</title>
+  </head>
+
+  <body onload="main()">
+    Chase Houske
+    <br>
+    chouske@ucsc.edu
+    <br>
+    Lighting world
+    <br>
+    I used chatgpt to help fix my normals not updating based on rotation after watching the class video on it. It told me I forgot to use uniformMatrix4fv to actually use the normal matrix's data
+    <br>
+    I used chatgpt just to help find small errors I had which was almost always forgetting to add a variable somewhere or typing its name wrong
+    <br>
+
+    <canvas id="webgl" width="400" height="400">
+    Please use a browser that supports "canvas"
+    </canvas>
+    <br>
+    <div id="shapeoptions">
+      Camera Angle X
+      <input type="range", min="-180", max="180", value="0", class="slider", id="angleSlide" oninput="(function(){g_globalAngle = event.target.value;})()">
+      <br />
+      Camera Angle Y
+      <input type="range", min="-180", max="180", value="0", class="slider", id="angleSlide" oninput="(function(){g_globalAngleY = event.target.value;})()">
+      <br />
+      Light X
+      <input type="range", min="-180", max="180", value="0", class="slider", id="angleSlide" oninput="(function(){g_lightX = event.target.value;})()">
+      <br />
+      Light Y
+      <input type="range", min="-180", max="180", value="0", class="slider", id="angleSlide" oninput="(function(){g_lightY = event.target.value;})()">
+      <br />
+      Light Z
+      <input type="range", min="-180", max="180", value="0", class="slider", id="angleSlide" oninput="(function(){g_lightZ = event.target.value;})()">
+      <br />
+      <button onclick="normalon=1">Normal on</button>
+      <button onclick="normalon=0">Normal off</button>
+      <br />
+      <button onclick="movinglight=1">Moving light on</button>
+      <button onclick="movinglight=0">Moving light off</button>
+      Head
+      <input type="range", min="-50", max="50", value="0", class="slider", id="headSlide" oninput="(function(){g_headAngle = event.target.value;})()">
+      Neck
+      <input type="range", min="0", max="75", value="45", class="slider", id="neckSlide" oninput="(function(){g_neckAngle = event.target.value;})()">
+    </div>
+    <div id="normals">
+      <button onclick="lighton=1">Light on</button>
+      <button onclick="lighton=0">Light off</button>
+    </div>
+    <script src="lib/Stats.js"></script>
+    <script src="lib/webgl-utils.js"></script>
+    <script src="lib/webgl-debug.js"></script>
+    <script src="lib/cuon-utils.js"></script>
+    <script src="lib/cuon-matrix-cse160.js"></script>
+    <script src="point.js"></script>
+    <script src="triangle.js"></script>
+    <script src="circle.js"></script>
+    <script src="pyramid.js"></script>
+    <script src="cube.js"></script>
+     <script src="sphere.js"></script>
+    <script src="Lighting.js"></script>
+  </body>
+</html>
