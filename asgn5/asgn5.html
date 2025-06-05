@@ -1,0 +1,203 @@
+<!---Chase Houske chouske@ucsc.edu-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Assignment 5</title>
+  </head>
+    <b>Assignment 5 by Chase Houske</b>
+    <br> </br>
+    I used chatgpt to find a single mistake of not replacing &lt;version&gt; with a version. I also couldn't find out why I couldn't see my object until chatgpt told me to scale it smaller because it might be too big</version>
+    It also told me how to change kd in my mtl to make the umbrella red from black(was missing a material for some reason)
+    <br></br>
+    <b>About my scene</b>
+    <br>
+    This is my night scene at the beach with a textured sand floor(it's not super easy to see) and textured rocks.
+    <br></br>
+    I have umbrellas, balls to play with, and a log to sit on
+    <br></br>
+    I have an ambient light, a white spotlight on the right umbrella representing light from the moon, and finally a pink directional light on the log representing a colored light used by people for a party
+    <br> </br>
+    <b>I didn't have the time to setup a camera and my skybox is really just a dark blue wall. Not sure why my sand appeared orange either, the texture was yellow</b>
+    <br></br>
+    <body>
+        <canvas id="c" width="600" height="600"></canvas>
+    </body>
+    <script type="importmap">
+        {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.177.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.177.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module">
+        import * as THREE from 'three';
+        import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
+        import {MTLLoader} from 'three/addons/loaders/MTLLoader.js';
+        function main(){
+            const canvas = document.querySelector('#c');
+            const renderer = new THREE.WebGLRenderer({antialias: true, canvas});
+            const fov = 75;
+            const aspect = 2;  // the canvas default
+            const near = 0.1;
+            const far = 6;
+            const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+            camera.position.z = 4;
+            const scene = new THREE.Scene();
+            const boxWidth = 1;
+            const boxHeight = 1;
+            const boxDepth = 1;
+            const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+            const material = new THREE.MeshPhongMaterial({color: 0x950606});
+            const greenmaterial = new THREE.MeshPhongMaterial({color: 0x00ff00});
+            const bluematerial = new THREE.MeshPhongMaterial({color: 0x0000ff});
+            const skymaterial = new THREE.MeshPhongMaterial({color: 0x131862});
+            const cube = new THREE.Mesh(geometry, material);
+            const cylindergeometry = new THREE.CylinderGeometry( 0.1, 0.1, 2.5, 32 ); 
+            const cylindermaterial = new THREE.MeshBasicMaterial( {color: 0xa52a2a} ); 
+            const log = new THREE.Mesh(cylindergeometry, material);
+            log.rotateZ(Math.PI/2);
+            log.position.set(0, -0.8, 2.8);
+            scene.add(log);
+            const spheregeometry = new THREE.SphereGeometry( 1, 32, 16 ); 
+            const ball = new THREE.Mesh(spheregeometry, material);
+            ball.scale.set(0.5, 0.25, 0.25);
+            ball.position.set(1.5, -0.75, 0);
+            const blueball = new THREE.Mesh(spheregeometry, bluematerial);
+            blueball.scale.set(0.5, 0.25, 0.25);
+            blueball.position.set(3.5, -0.75, 1);
+            const greenball = new THREE.Mesh(spheregeometry, greenmaterial);
+            greenball.scale.set(0.25, 0.125, 0.125);
+            greenball.position.set(-1.8, -0.75, 2.7);
+            scene.add(ball);
+            scene.add(blueball);
+            scene.add(greenball);
+            const skycube = new THREE.Mesh(geometry, skymaterial);
+            scene.add(skycube); 
+            skycube.scale.set(20, 10, 1);
+            skycube.position.set(0, 0, -2.5);
+
+
+
+            {const color = 0xFF69B4;
+            const intensity = 10;
+            const light = new THREE.DirectionalLight(color, intensity);
+            light.position.set(0, -0.8, 2.8);
+            scene.add(light);
+            }
+            const spotLight = new THREE.SpotLight( 0xffffff );
+            spotLight.intensity = 10;
+            spotLight.distance = 4;
+            spotLight.position.set(5, 0.5, 0.3);
+            scene.add(spotLight);
+            {
+            const color = 0xFFFFFF;
+            const intensity = 1;
+            const light = new THREE.AmbientLight(color, intensity);
+            scene.add(light);
+            }
+
+            //
+            const loader = new THREE.TextureLoader();
+            const sandtexture = loader.load('resources/images/sand.jpg' );
+            sandtexture.colorSpace = THREE.SRGBColorSpace;
+            const sandtextmaterial = new THREE.MeshBasicMaterial({
+                color: 0xFF8844,
+                map: sandtexture,
+            });
+            const sandfloor = new THREE.Mesh(geometry, sandtextmaterial);
+            sandfloor.scale.set(18, 0.1, 18);
+            sandfloor.position.set(0, -1, 0)
+            scene.add(sandfloor);
+            {
+                const mtlLoader = new MTLLoader();
+                const objLoader = new OBJLoader();
+                mtlLoader.load('resources/models/Stone.mtl', (mtl) => {
+                mtl.preload();
+                objLoader.setMaterials(mtl);
+                function createrock(x, y, z, scale){
+                    objLoader.load('resources/models/Stone.obj', (root) => {
+                    scene.add(root);
+                    root.scale.set(scale, scale, scale);
+                    root.position.set(x, y, z);
+                    });
+                }
+                createrock(-2, -0.8, 0.3, 0.05)
+                createrock(-1.4, -0.8, 0, 0.05)
+                createrock(-.8, -0.8, 0, 0.05)
+                createrock(-.9, -0.8, 1.5, 0.05)
+                createrock(1.3, -0.8, 1, 0.05)
+                createrock(-4, -0.8, -1.4, 0.05)
+                createrock(-4, -0.8, 0, 0.05)
+                createrock(-3.5, -0.8, 1, 0.05)
+                createrock(-1.5, -0.8, 2, 0.05)
+                createrock(1.5, -0.8, 2, 0.05)
+                createrock(2, -0.8, 1, 0.05)
+                });
+            }
+            {
+                const mtlLoader = new MTLLoader();
+                const objLoader = new OBJLoader();
+                mtlLoader.load('resources/models/umbrella.mtl', (mtl) => {
+                mtl.preload();
+                objLoader.setMaterials(mtl);
+                function createumbrella(x, y, z, scale){
+                objLoader.load('resources/models/umbrella.obj', (root) => {
+                    scene.add(root);
+                    root.scale.set(scale, scale, scale);
+                    root.position.set(x, y, z);
+                    });
+                    
+                }
+                createumbrella(0, -1.5, 0, 0.1);
+                createumbrella(4, -1.5, 0, 0.1);
+                });
+            }
+            let stars = []
+            {
+                const mtlLoader = new MTLLoader();
+                const objLoader = new OBJLoader();
+                mtlLoader.load('resources/models/star.mtl', (mtl) => {
+                mtl.preload();
+                objLoader.setMaterials(mtl);
+                function createstar(x, y, z, scale){
+                objLoader.load('resources/models/star.obj', (root) => {
+                    scene.add(root);
+                    root.scale.set(scale*2, scale, scale);
+                    root.position.set(x, y, z);
+                     stars.push(root);
+                    });
+                   
+                    
+                }
+                createstar(-4, 1, 0, 0.2);
+                createstar(-2, 2, 0, 0.2);
+                createstar(0, 1, 0, 0.2);
+                createstar(2, 2, 0, 0.2);
+                createstar(4, 1, 0, 0.2);
+                });
+            }
+
+            renderer.render(scene, camera);
+            function makeInstance(geometry, color, x) {
+                const material = new THREE.MeshPhongMaterial({color});
+                const cube = new THREE.Mesh(geometry, material);
+                scene.add(cube); 
+                cube.position.x = x;     
+                return cube;
+            }
+            function render(time) {
+            for(const star of stars){
+                star.rotateY(0.05);
+            }
+            time *= 0.001;  // convert time to seconds    
+            renderer.render(scene, camera);
+            requestAnimationFrame(render);
+        }
+        requestAnimationFrame(render);
+        }
+        main();
+        
+    </script>
+</html>
